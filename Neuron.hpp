@@ -3,6 +3,7 @@
 #include "ActivationFunction.hpp"
 #include "Vector.hpp"
 #include <list>
+#include <nlohmann/json.hpp>
 #include <random>
 
 namespace Sagacity {
@@ -35,8 +36,11 @@ private:
   Vector backPropError() const;
   void correctWeights(double alpha, double gamma);
 
+  nlohmann::json toJSON() const;
+
 public:
   Neuron(size_t numberOfInputs, const ActivationFunction &activationFunction);
+  Neuron(const nlohmann::json &json);
 };
 
 } // namespace Sagacity

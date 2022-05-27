@@ -22,6 +22,7 @@ public:
   typedef std::initializer_list<LayerConfig> NetworkConfig;
 
   Network(size_t numberOfInputs, const NetworkConfig &networkConfig);
+  Network(const nlohmann::json &json);
 
   Vector operator()(Vector inputs) const;
 
@@ -29,6 +30,8 @@ public:
 
   void train(const TrainingData &trainingData, size_t numberOfCycles,
              double alpha = .1, double gamma = .1);
+
+  nlohmann::json toJSON() const;
 };
 
 } // namespace Sagacity

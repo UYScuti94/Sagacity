@@ -12,6 +12,11 @@ Network::Network(size_t numberOfInputs, const NetworkConfig &networkConfig) {
   }
 }
 
+Network::Network(const nlohmann::json &json) {
+  for (size_t i = 0; i < json["layers"].size(); i++)
+    m_layers.emplace_back(json["layers"][i]);
+}
+
 Vector Network::operator()(Vector inputs) const {
   Vector &outputs = inputs;
   for (const Layer &layer : m_layers)
@@ -51,6 +56,14 @@ void Network::train(const TrainingData &trainingData, size_t numberOfCycles,
     for (const auto &trainingPair : trainingData)
       trainingCycle(trainingPair.first, trainingPair.second, alpha, gamma);
   setTraining(false);
+}
+
+nlohmann::json Network::toJSON() const {
+  nlohmann::json network;
+  size_t i = 0;
+  for (const Layer &layer : m_layers)
+    network["layers"][i++] = layer.toJSON();
+  return network;
 }
 
 } // namespace Sagacity

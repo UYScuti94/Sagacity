@@ -18,9 +18,12 @@ private:
   void correctWeights(double alpha, double gamma);
   void setTraining(bool training);
 
+  nlohmann::json toJSON() const;
+
 public:
   Layer(size_t numberOfInputs, size_t numberOfNeurons,
         const ActivationFunction &activationFunction);
+  Layer(const nlohmann::json &json);
 };
 
 } // namespace Sagacity

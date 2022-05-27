@@ -11,4 +11,8 @@ if (BUILD_TESTS)
     add_subdirectory(Tests)
 endif()
 
+find_package(nlohmann_json REQUIRED)
+
 add_library(Sagacity STATIC ${headers} ${sources})
+
+target_link_directories(Sagacity PUBLIC nlohmann_json)

@@ -10,6 +10,11 @@ Layer::Layer(size_t numberOfInputs, size_t numberOfNeurons,
     m_neurons.emplace_back(numberOfInputs, activationFunction);
 }
 
+Layer::Layer(const nlohmann::json &json) {
+  for (size_t i = 0; i < json["neurons"].size(); i++)
+    m_neurons.emplace_back(json["neurons"][i]);
+}
+
 Vector Layer::operator()(const Vector &inputs) const {
   Vector outputs(m_neurons.size());
   std::transform(m_neurons.cbegin(), m_neurons.cend(), outputs.begin(),
@@ -41,6 +46,14 @@ void Layer::correctWeights(double alpha, double gamma) {
 void Layer::setTraining(bool training) {
   for (Neuron &neuron : m_neurons)
     neuron.m_training = training;
+}
+
+nlohmann::json Layer::toJSON() const {
+  nlohmann::json neurons;
+  size_t i = 0;
+  for (const Neuron &neuron : m_neurons)
+    neurons["neurons"][i++] = neuron.toJSON();
+  return neurons;
 }
 
 } // namespace Sagacity

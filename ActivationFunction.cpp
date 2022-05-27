@@ -42,4 +42,29 @@ const ActivationFunction ActivationFunction::TanSig(tansig, [](double x) {
   return 1.0 - pow(tansig(x), 2);
 });
 
+#define NAME_OBJECT_PAIR(object)                                               \
+  { #object, object }
+
+const std::unordered_map<std::string,
+                         std::reference_wrapper<const ActivationFunction>>
+    ActivationFunction::m_activationFunctionMap = {
+        NAME_OBJECT_PAIR(HardLim),   NAME_OBJECT_PAIR(HardLims),
+        NAME_OBJECT_PAIR(HardLimss), NAME_OBJECT_PAIR(PureLin),
+        NAME_OBJECT_PAIR(ReLU),      NAME_OBJECT_PAIR(LogSig),
+        NAME_OBJECT_PAIR(TanSig)};
+
+#undef NAME_OBJECT_PAIR
+
+const ActivationFunction &ActivationFunction::called(const std::string &name) {
+  return m_activationFunctionMap.at(name);
+}
+
+std::string
+ActivationFunction::name(const ActivationFunction &activationFunction) {
+  for (const auto &nameObjectPair : m_activationFunctionMap)
+    if (&nameObjectPair.second.get() == &activationFunction)
+      return nameObjectPair.first;
+  throw std::invalid_argument("Activation function name not found!");
+}
+
 } // namespace Sagacity

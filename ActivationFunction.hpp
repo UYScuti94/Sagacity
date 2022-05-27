@@ -1,6 +1,8 @@
 #pragma once
 
 #include <functional>
+#include <string>
+#include <unordered_map>
 
 namespace Sagacity {
 
@@ -32,6 +34,15 @@ public:
   static const ActivationFunction ReLU;
   static const ActivationFunction LogSig;
   static const ActivationFunction TanSig;
+
+private:
+  static const std::unordered_map<
+      std::string, std::reference_wrapper<const ActivationFunction>>
+      m_activationFunctionMap;
+
+public:
+  static const ActivationFunction &called(const std::string &name);
+  static std::string name(const ActivationFunction &activationFunction);
 };
 
 } // namespace Sagacity
